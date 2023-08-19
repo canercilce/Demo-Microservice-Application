@@ -79,6 +79,7 @@ public class GroupService {
         data.put("groupName", "All");
         Tree tree = new Tree(data);
         List<Group> allGroups = this.getAllGroups();
+        List<Vehicle> allVehicles = vehicleService.getAllVehicles();
         for(Group g: allGroups) {
             data = new HashMap<>();
             data.put("id", g.getId().toString());
@@ -86,7 +87,8 @@ public class GroupService {
             Tree.Node node = new Tree.Node(data);
             for(Object s : Util.stringToArrayList(g.getChildren())) {
                 if(s.toString().startsWith("V")){
-                    Vehicle vehicle = vehicleService.getVehicleById(Long.valueOf(s.toString().substring(1)));
+                    Vehicle vehicle = (Vehicle) Util.findObjectBy("id", s.toString().substring(1), new ArrayList<>(allVehicles));
+                    //Vehicle vehicle = vehicleService.getVehicleById(Long.valueOf(s.toString().substring(1))); //old code
                     Tree.Node node1 = new Tree.Node(vehicle);
                     tree.addChild(node, node1);
                 }
